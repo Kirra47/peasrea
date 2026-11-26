@@ -17,7 +17,7 @@
  *      —— 不需要改 dex、不需要重打包、不需要改签名。
  *
  * 用法：
- *   frida -U -f com.alibaba.android.rimet.w2534344268 -l frida_isurgeon.js --no-pause
+ *   frida -U -f <PKG> -l frida_isurgeon.js --no-pause
  *     （必须 spawn 模式：要赶在任何门控方法被调用之前装好 $surgeonFlag）
  *   只想看效果不想改行为：把 DRY_RUN 置 true。
  */
@@ -77,7 +77,7 @@ var TARGETS = [
   'xz6',                                                      // classes30
   'j35',                                                      // classes8
   'q01',                                                      // classes4
-  'com.alibaba.dingtalk.safeguard.AntiStrategyHandler'         // classes13
+  'com.<vendor>.safeguard.AntiStrategyHandler'         // classes13
 ];
 
 /* ------------------------------------------------------------------ */

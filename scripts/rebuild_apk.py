@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""用补丁后的 dex 重建钉钉 APK，并去掉旧签名（随后用 apksigner 重签）。
+"""用补丁后的 dex 重建IM APK，并去掉旧签名（随后用 apksigner 重签）。
 
 用法:
-    python tools/patch/rebuild_apk.py target.apk tools/patch/out tools/patch/out/dingtalk_unlocked.apk
+    python tools/patch/rebuild_apk.py target.apk tools/patch/out tools/patch/out/imclient_unlocked.apk
 """
 import os
 import sys

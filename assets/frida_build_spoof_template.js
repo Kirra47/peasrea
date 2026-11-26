@@ -7,7 +7,7 @@
  *   （只有 getMODEL / getRELEASE / getSERIAL 三个方法），所以影子类必须一起 hook。
  *
  * 用法（需 root + frida-server；目标必须是**官方签名**的 APK）：
- *   frida -U -f com.alibaba.android.rimet.w2534344268 -l spoof_tablet.js --no-pause
+ *   frida -U -f <PKG> -l spoof_tablet.js --no-pause
  *   或先 `frida -U -f ... --no-pause` 再 `%load spoof_tablet.js`
  *
  * 额外建议（不改代码就能影响"是否平板"判定）：
@@ -28,7 +28,7 @@ var FAKE = {
 };
 
 Java.perform(function () {
-    // 1) SG 影子 Build：钉钉业务层实际调用的入口
+    // 1) SG 影子 Build：IM业务层实际调用的入口
     try {
         var ShadowBuild = Java.use('com.alibaba.wireless.security.aopsdk.replace.android.os.Build');
         ShadowBuild.getMODEL.implementation = function () {

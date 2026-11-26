@@ -37,6 +37,6 @@
 - `skill/05-security.md` — 5 块
 - `skill/06-protocol.md` — 5 块
 - `skill/07-patching-verify.md` — 7 块
-- `skill/08-case-dingtalk.md` — 5 块
+- `skill/08-case-im-client.md` — 5 块
 - `skill/09-ideas-log.md` — 6 块
 - `skill/10-toolchain-integration.md` — 7 块

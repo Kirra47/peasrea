@@ -4,7 +4,7 @@
 用法:
     python kb_query.py "长连接"                      # 全库检索
     python kb_query.py "导出组件" --top 5
-    python kb_query.py "ISurgeon" --case dingtalk-8.2.2.1
+    python kb_query.py "ISurgeon" --case imclient-8.2.2.1
     python kb_query.py --stats                       # 规模 + 案例/来源清单
     python kb_query.py --cases                       # 只列案例
 

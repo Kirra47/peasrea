@@ -146,7 +146,7 @@ references/04-native.md            ELF、加固、JNI 表、段表还原
 references/05-security.md          安全栈、风控、检测清单
 references/06-protocol.md          MTOP 签名、LWS 帧、抓包现实
 references/07-patching-verify.md   三条补丁路线 + 真机验证 + 回滚
-references/08-case-imclient.md     案例复盘：可行性边界与教训
+references/08-case-im-client.md     案例复盘：可行性边界与教训
 references/09-ideas-log.md         想法台账：每条试过的路 + ✅/⚠️/❌ 依据
 references/10-rea-integration.md   与 REA 工具链的协同（native/Android/流量/证据）
 scripts/                           可直接复用的工具

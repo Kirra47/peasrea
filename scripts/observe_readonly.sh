@@ -3,10 +3,10 @@
 # 用法： bash tools/runtime/observe_readonly.sh [SERIAL] [SECONDS]
 set -u
 
-ADB="${ADB:-C:/Users/ROG STRIX/AppData/Local/Microsoft/WinGet/Packages/Google.PlatformTools_Microsoft.Winget.Source_8wekyb3d8bbwe/platform-tools/adb.exe}"
+ADB="${ADB:-adb}"   # 也可以显式导出 ADB=/path/to/adb
 SERIAL="${1:-}"
 SECS="${2:-60}"
-PKG="com.alibaba.android.rimet.w2534344268"
+PKG="<PKG>"
 OUT="scan/runtime"
 mkdir -p "$OUT"
 
@@ -38,8 +38,8 @@ PY
 fi
 
 echo "[3] 进程与组件状态"
-A shell "ps -A | grep -i rimet" > "$OUT/processes.txt" 2>&1; cat "$OUT/processes.txt"
-A shell "dumpsys activity providers | grep -A3 -i rimet" > "$OUT/providers.txt" 2>&1
+A shell "ps -A | grep -i <pkg>" > "$OUT/processes.txt" 2>&1; cat "$OUT/processes.txt"
+A shell "dumpsys activity providers | grep -A3 -i <pkg>" > "$OUT/providers.txt" 2>&1
 A shell "dumpsys activity services $PKG" > "$OUT/services.txt" 2>&1
 
 echo "[4] 网络：远端 IP 快照（/proc/net/tcp{,6}，只读）"

@@ -1,8 +1,8 @@
 /*
- * 钉钉 8.2.2.1 专属版（com.alibaba.android.rimet.w2534344268）解锁脚本
+ * IM 8.2.2.1 专属版（<PKG>）解锁脚本
  *
  * 适用：已 root / 已注入 frida-gadget / 可 attach 的实例。
- * 用法：frida -U -f com.alibaba.android.rimet.w2534344268 -l unlock.js --no-pause
+ * 用法：frida -U -f <PKG> -l unlock.js --no-pause
  *      或 frida -U -n <进程名> -l unlock.js
  *
  * 解锁内容：
@@ -70,7 +70,7 @@ Java.perform(function () {
 
 /*
  * 可选：如果你已经有一个 Surgeon patch dex（见 tools/surgeon/），可用下面几行在运行时加载它，
- * 这样无需 hook 具体方法，而是走钉钉官方的热修通道替换任意 instrumented 方法：
+ * 这样无需 hook 具体方法，而是走IM官方的热修通道替换任意 instrumented 方法：
  *
  * Java.perform(function () {
  *   var ctx = Java.use('android.app.ActivityThread').currentApplication().getApplicationContext();

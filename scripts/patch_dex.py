@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""钉钉 8.2.2.1（com.alibaba.android.rimet.w2534344268）解锁补丁：dex 级字节补丁
+"""IM 8.2.2.1（<PKG>）解锁补丁：dex 级字节补丁
 
 补丁 1 — defpackage/ywm.a()Z （classes8.dex）
     原逻辑：return InstrumentAPI.support($surgeonFlag, "1669440712") ? ... : f69400a;
