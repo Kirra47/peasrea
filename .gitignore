@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# 分析产物（体积大，且常含目标样本信息）
+*.apk
+*.aab
+*.dex
+*.so
+*.class
+*.idsig
+unpacked/
+apktool/
+java/
+analysis/
+scan/
+*.log
+
+# 知识库可重建；按需取舍
+# kb/kb.sqlite
+kb/findings.jsonl
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
