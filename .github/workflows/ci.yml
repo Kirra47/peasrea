@@ -27,7 +27,7 @@ jobs:
       - name: Syntax check (all scripts)
         run: |
           set -euo pipefail
-          python -m py_compile scripts/*.py tests/*.py
+          python -m py_compile peasrea.py scripts/*.py tests/*.py
           echo "compiled: $(ls scripts/*.py | wc -l) scripts"
 
       - name: SKILL.md frontmatter
@@ -66,6 +66,14 @@ jobs:
           python scripts/kb_query.py --stats | head -20
           python scripts/kb_query.py --cases
 
+      - name: CLI smoke
+        run: |
+          set -euo pipefail
+          python peasrea.py --version
+          python peasrea.py info
+          python peasrea.py query 长连接 --top 1 | grep -q 长连接
+          python peasrea.py query --stats | head -5 || true
+
       - name: Tool CLI smoke (empty inputs)
         run: |
           set -euo pipefail
@@ -92,7 +100,7 @@ jobs:
       - name: Install pytest
         run: python -m pip install -q -r tests/requirements.txt
       - name: Run tests
-        run: python -m pytest tests -q --verbosity=2
+        run: python -m pytest tests
 
   kb-staleness:
     name: kb index up to date

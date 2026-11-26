@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "peasrea"
+version = "0.1.0"
+description = "PeasRea — Android 大型客户端逆向工作流：技能 + 工具 + 知识库"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "PeasRea contributors" }]
+keywords = ["android", "reverse-engineering", "dex", "axml", "frida", "knowledge-base"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Topic :: Security",
+]
+
+[project.scripts]
+peasrea = "peasrea:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10"]
+
+[tool.setuptools]
+py-modules = ["peasrea"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

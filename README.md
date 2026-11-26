@@ -52,10 +52,32 @@ python scripts/coverage_check.py java/sources <unpacked>/dex --json cov.json
 
 只依赖 Python 3.9+ 标准库（SQLite 需带 FTS5，官方发行版默认带）。
 
+## 命令行（一个入口）
+
+```bash
+python peasrea.py --version
+python peasrea.py info                    # 版本 + 知识库规模
+python peasrea.py query 长连接 --top 3     # 检索知识库
+python peasrea.py query --stats
+python peasrea.py kb-build                # 重建索引
+python peasrea.py kb-add-case --case my-app-1.0 --from analysis/
+python peasrea.py index unpacked/dex --out dex-index
+python peasrea.py coverage java/sources unpacked/dex --json cov.json
+python peasrea.py manifest in.xml out.xml com.example.Target
+```
+
+也可安装成命令（editable）：
+
+```bash
+pip install -e .
+peasrea info
+```
+
 ## 脚本
 
 | 脚本 | 用途 |
 |---|---|
+| `peasrea.py` | 统一入口：`info/query/kb-build/kb-add-case/index/coverage/manifest` |
 | `coverage_check.py` | 真实口径的反编译覆盖率（区分 synthetic / 内部类 / 默认包） |
 | `dex_index.py` | 轻量 dex 索引：类表、包统计、重复类（18 万类 < 1 秒） |
 | `patch_manifest.py` | 二进制 AXML 直接改 `android:exported`（不重打包） |
@@ -72,7 +94,7 @@ pip install -r tests/requirements.txt
 python -m pytest tests -q
 ```
 
-`tests/` 里有合成的最小 AXML 与 dex（`axml_builder.py` / `dex_builder.py`），
+`tests/` 里有合成的最小 AXML 与 dex（`axml_builder.py` / `dex_builder.py` / `dex_builder_methods.py`），
 不依赖真实样本即可验证：`exported` 定点翻转、dex 类索引、覆盖率口径、知识库构建与中文检索。
 
 CI（`.github/workflows/ci.yml`）跑四件事：
@@ -80,7 +102,7 @@ CI（`.github/workflows/ci.yml`）跑四件事：
 | 任务 | 作用 |
 |---|---|
 | `python-checks`（3.10 / 3.12） | 语法编译、SKILL.md frontmatter、知识库重建、CLI 空输入冒烟 |
-| `pytest`（3.10 / 3.12） | 13 个用例：AXML 补丁 / dex 索引 / 覆盖率 / 知识库 |
+| `pytest`（3.10 / 3.12） | 24 个用例：AXML 补丁 / dex 索引 / 覆盖率 / 知识库 |
 | `kb-staleness` | 重建后 `kb/index.md` 必须与提交一致（防止改了报告忘重建） |
 | `redaction-guard` | 全仓扫描品牌/密钥/个人信息，命中即失败 |
 
