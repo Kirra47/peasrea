@@ -21,7 +21,7 @@ jobs:
           set -euo pipefail
           name="peasrea-${GITHUB_REF_NAME}"
           mkdir -p "dist/$name"
-          for item in SKILL.md README.md LICENSE references scripts assets kb install.sh install.ps1; do
+          for item in SKILL.md README.md LICENSE peasrea.py pyproject.toml references scripts assets kb install.sh install.ps1; do
             cp -R "$item" "dist/$name/"
           done
           find "dist/$name" -name '__pycache__' -type d -exec rm -rf {} + 2>/dev/null || true

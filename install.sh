@@ -5,7 +5,7 @@ SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEST="${1:-$HOME/.agents/skills/peasrea}"
 
 mkdir -p "$DEST"
-for d in SKILL.md README.md LICENSE references scripts assets kb; do
+for d in SKILL.md README.md LICENSE peasrea.py pyproject.toml references scripts assets kb; do
   [ -e "$SRC/$d" ] && cp -R "$SRC/$d" "$DEST/"
 done
 find "$DEST" -name '__pycache__' -type d -exec rm -rf {} + 2>/dev/null || true

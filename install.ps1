@@ -6,7 +6,7 @@ $ErrorActionPreference = "Stop"
 $src = $PSScriptRoot
 New-Item -ItemType Directory -Force -Path $Dest | Out-Null
 
-foreach ($item in @("SKILL.md", "README.md", "LICENSE", "references", "scripts", "assets", "kb")) {
+foreach ($item in @("SKILL.md", "README.md", "LICENSE", "peasrea.py", "pyproject.toml", "references", "scripts", "assets", "kb")) {
     $p = Join-Path $src $item
     if (Test-Path $p) { Copy-Item $p -Destination $Dest -Recurse -Force }
 }
