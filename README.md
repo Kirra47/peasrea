@@ -1,5 +1,7 @@
 # PeasRea
 
+[![CI](https://github.com/Kirra47/peasrea/actions/workflows/ci.yml/badge.svg)](https://github.com/Kirra47/peasrea/actions/workflows/ci.yml)
+
 > 大型 Android 客户端的**可复核逆向工作流**：技能包 + 可复用工具 + 可检索知识库。
 >
 > 不是「教你破解某个 App」，而是把「怎么把一个 18 万类的包拆明白、并且每一步都能被验证」写成流程。

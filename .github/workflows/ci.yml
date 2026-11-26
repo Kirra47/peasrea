@@ -1,0 +1,107 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  python-checks:
+    name: py${{ matrix.python }} checks
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Syntax check (all scripts)
+        run: |
+          set -euo pipefail
+          python -m py_compile scripts/*.py
+          echo "compiled: $(ls scripts/*.py | wc -l) files"
+
+      - name: SKILL.md frontmatter
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import re, sys, pathlib
+          text = pathlib.Path("SKILL.md").read_text(encoding="utf-8")
+          m = re.match(r"^---\n(.*?)\n---\n", text, re.S)
+          if not m:
+              sys.exit("SKILL.md: missing YAML frontmatter")
+          fm = m.group(1)
+          name = re.search(r"^name:\s*(\S+)", fm, re.M)
+          desc = re.search(r"^description:\s*(.+)$", fm, re.M)
+          if not name or name.group(1) != "peasrea":
+              sys.exit(f"SKILL.md: name must be peasrea, got {name and name.group(1)!r}")
+          if not desc or len(desc.group(1)) < 40:
+              sys.exit("SKILL.md: description too short")
+          print("frontmatter ok:", name.group(1))
+          PY
+
+      - name: Knowledge base — rebuild into temp and verify
+        run: |
+          set -euo pipefail
+          tmp=$(mktemp -d)
+          cp -r kb "$tmp/kb"
+          cp -r references "$tmp/references"
+          cp -r scripts "$tmp/scripts"
+          cd "$tmp"
+          python scripts/kb_build.py --kb kb
+          python scripts/kb_query.py --stats
+          # 至少能检索出东西
+          hits=$(python scripts/kb_query.py "补丁" --top 1 | wc -l)
+          echo "query lines: $hits"
+          test "$hits" -gt 2
+
+      - name: Committed kb is readable
+        run: |
+          set -euo pipefail
+          echo "KB_DB=$PWD/kb/kb.sqlite" >> "$GITHUB_ENV"
+          python scripts/kb_query.py --stats | head -20
+          python scripts/kb_query.py "导出组件" --top 1 || true
+
+      - name: Tool CLI smoke (arg handling on empty inputs)
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/emptydex /tmp/emptyjava
+          python scripts/dex_index.py /tmp/emptydex --out /tmp/dexi
+          grep -q '"classes": 0' /tmp/dexi/summary.json
+          # 没有 dex 时应给出提示并以非 0 退出
+          if python scripts/coverage_check.py /tmp/emptyjava /tmp/emptydex; then
+            echo "::error::coverage_check 应在无 dex 时返回非 0"; exit 1
+          fi
+          echo "cli smoke ok"
+
+  redaction-guard:
+    name: redaction guard
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: No brand / secret / personal data in tracked files
+        run: |
+          set -euo pipefail
+          # 只扫描文档与知识库；排除 .github（本文件自身含这些词）与 .git
+          PATTERN='钉钉|dingtalk|rimet|HiWork|潘云昊|panyunhao|潍柴|client_secret *= *[0-9a-f]{8}'
+          if git grep -nIiE "$PATTERN" -- . ':!.github' ':!LICENSE' ; then
+            echo "::error::发现未脱敏内容（品牌/密钥/个人信息），请替换为占位符"
+            exit 1
+          fi
+          echo "redaction: clean"
+
+      - name: Placeholder counts (informational)
+        run: |
+          for p in "<PKG>" "<ORG>" "<REDACTED_CLIENT_SECRET>" "<host>"; do
+            printf '%-28s %s\n' "$p" "$(git grep -o -- "$p" -- . | wc -l)"
+          done || true
