@@ -1,0 +1,39 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  bundle:
+    name: build skill bundle
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Assemble bundle
+        run: |
+          set -euo pipefail
+          name="peasrea-${GITHUB_REF_NAME}"
+          mkdir -p "dist/$name"
+          for item in SKILL.md README.md LICENSE references scripts assets kb install.sh install.ps1; do
+            cp -R "$item" "dist/$name/"
+          done
+          find "dist/$name" -name '__pycache__' -type d -exec rm -rf {} + 2>/dev/null || true
+          (cd dist && zip -qr "$name.zip" "$name")
+          (cd dist && tar -czf "$name.tar.gz" "$name")
+          ls -lh dist
+
+      - name: Upload release assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*.zip
+            dist/*.tar.gz
+          generate_release_notes: true
+          fail_on_unmatched_files: true

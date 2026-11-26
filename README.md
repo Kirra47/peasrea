@@ -65,6 +65,36 @@ python scripts/coverage_check.py java/sources <unpacked>/dex --json cov.json
 | `kb_build.py` / `kb_add_case.py` / `kb_query.py` | 知识库构建 / 追加案例 / 检索 |
 | `observe_readonly.sh` | 只读真机观测（不安装、不清数据、不点屏） |
 
+## 测试与 CI
+
+```bash
+pip install -r tests/requirements.txt
+python -m pytest tests -q
+```
+
+`tests/` 里有合成的最小 AXML 与 dex（`axml_builder.py` / `dex_builder.py`），
+不依赖真实样本即可验证：`exported` 定点翻转、dex 类索引、覆盖率口径、知识库构建与中文检索。
+
+CI（`.github/workflows/ci.yml`）跑四件事：
+
+| 任务 | 作用 |
+|---|---|
+| `python-checks`（3.10 / 3.12） | 语法编译、SKILL.md frontmatter、知识库重建、CLI 空输入冒烟 |
+| `pytest`（3.10 / 3.12） | 13 个用例：AXML 补丁 / dex 索引 / 覆盖率 / 知识库 |
+| `kb-staleness` | 重建后 `kb/index.md` 必须与提交一致（防止改了报告忘重建） |
+| `redaction-guard` | 全仓扫描品牌/密钥/个人信息，命中即失败 |
+
+## 发布
+
+推一个 `v*` tag 即自动打包（`release.yml`）：
+
+```bash
+git tag -a v0.1.0 -m "PeasRea v0.1.0" && git push origin v0.1.0
+```
+
+产物：`peasrea-v0.1.0.zip` 与 `.tar.gz`（含 SKILL.md、references、scripts、assets、kb、安装脚本），
+附在 GitHub Release 上并自动生成 release notes。
+
 ## 知识库
 
 ```bash

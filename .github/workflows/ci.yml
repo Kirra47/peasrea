@@ -27,8 +27,8 @@ jobs:
       - name: Syntax check (all scripts)
         run: |
           set -euo pipefail
-          python -m py_compile scripts/*.py
-          echo "compiled: $(ls scripts/*.py | wc -l) files"
+          python -m py_compile scripts/*.py tests/*.py
+          echo "compiled: $(ls scripts/*.py | wc -l) scripts"
 
       - name: SKILL.md frontmatter
         run: |
@@ -53,35 +53,67 @@ jobs:
         run: |
           set -euo pipefail
           tmp=$(mktemp -d)
-          cp -r kb "$tmp/kb"
-          cp -r references "$tmp/references"
-          cp -r scripts "$tmp/scripts"
+          cp -r kb "$tmp/kb"; cp -r references "$tmp/references"; cp -r scripts "$tmp/scripts"
           cd "$tmp"
           python scripts/kb_build.py --kb kb
           python scripts/kb_query.py --stats
-          # 至少能检索出东西
-          hits=$(python scripts/kb_query.py "补丁" --top 1 | wc -l)
-          echo "query lines: $hits"
+          hits=$(python scripts/kb_query.py "长连接" --top 1 | wc -l)
           test "$hits" -gt 2
 
       - name: Committed kb is readable
         run: |
           set -euo pipefail
-          echo "KB_DB=$PWD/kb/kb.sqlite" >> "$GITHUB_ENV"
           python scripts/kb_query.py --stats | head -20
-          python scripts/kb_query.py "导出组件" --top 1 || true
+          python scripts/kb_query.py --cases
 
-      - name: Tool CLI smoke (arg handling on empty inputs)
+      - name: Tool CLI smoke (empty inputs)
         run: |
           set -euo pipefail
           mkdir -p /tmp/emptydex /tmp/emptyjava
           python scripts/dex_index.py /tmp/emptydex --out /tmp/dexi
           grep -q '"classes": 0' /tmp/dexi/summary.json
-          # 没有 dex 时应给出提示并以非 0 退出
           if python scripts/coverage_check.py /tmp/emptyjava /tmp/emptydex; then
             echo "::error::coverage_check 应在无 dex 时返回非 0"; exit 1
           fi
           echo "cli smoke ok"
+
+  pytest:
+    name: pytest py${{ matrix.python }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install pytest
+        run: python -m pip install -q -r tests/requirements.txt
+      - name: Run tests
+        run: python -m pytest tests -q --verbosity=2
+
+  kb-staleness:
+    name: kb index up to date
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Rebuild index
+        run: python scripts/kb_build.py --kb kb
+      - name: kb/index.md must match committed version
+        run: |
+          set -euo pipefail
+          if ! git diff --quiet -- kb/index.md; then
+            echo "::error::kb/index.md 已过期：改了报告却忘记重建索引。"
+            echo "修复：python scripts/kb_build.py --kb kb 然后提交 kb/index.md"
+            git --no-pager diff -- kb/index.md | head -60
+            exit 1
+          fi
+          echo "kb index: up to date"
 
   redaction-guard:
     name: redaction guard
@@ -92,7 +124,6 @@ jobs:
       - name: No brand / secret / personal data in tracked files
         run: |
           set -euo pipefail
-          # 只扫描文档与知识库；排除 .github（本文件自身含这些词）与 .git
           PATTERN='钉钉|dingtalk|rimet|HiWork|潘云昊|panyunhao|潍柴|client_secret *= *[0-9a-f]{8}'
           if git grep -nIiE "$PATTERN" -- . ':!.github' ':!LICENSE' ; then
             echo "::error::发现未脱敏内容（品牌/密钥/个人信息），请替换为占位符"
