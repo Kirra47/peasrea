@@ -1,6 +1,6 @@
 # 知识库索引
 
-- 块数 **390** ｜ 字符 **350,409** ｜ 分词 `trigram`
+- 块数 **399** ｜ 字符 **354,344** ｜ 分词 `trigram`
 
 ## 案例
 
@@ -9,7 +9,7 @@
   - sha256: `2433588b58436a0e55270f2a66c286f0fe7bc41618d7f5e069fc6ef99d609195`
   - date: `2026-10-27`
   - classes: `180864`
-- **skill** — skill （55 块）
+- **skill** — skill （64 块）
 
 ## 来源
 
@@ -40,3 +40,4 @@
 - `skill/08-case-im-client.md` — 5 块
 - `skill/09-ideas-log.md` — 6 块
 - `skill/10-toolchain-integration.md` — 7 块
+- `skill/11-h5-app-recon.md` — 9 块

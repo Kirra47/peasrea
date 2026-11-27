@@ -15,7 +15,7 @@
 
 ```bash
 adb shell dumpsys window | grep mCurrentFocus           # 看宿主 Activity
-adb shell "su -c 'ls /data/data/<pkg>/files/dingtalkTheOne/ariverPackages/installed'"  # 小程序
+adb shell "su -c 'ls /data/data/<pkg>/files/<container>/ariverPackages/installed'"  # 小程序
 adb shell ls /sdcard/Android/data/<pkg>/files/nebulaDownload                            # 小程序下载区
 ```
 

@@ -44,7 +44,7 @@ def test_masks_nested_json_string(tmp_path):
 
 
 def test_masks_query_and_tokens(tmp_path):
-    rec = {"path": "/passport/v1/auth/dingtalk?code=abc&platform=Android",
+    rec = {"path": "/passport/v1/auth/<idp>?code=abc&platform=Android",
            "resp_body": json.dumps({"data": {"csrfToken": "x" * 32, "ticket": "t"}}, ensure_ascii=False)}
     out = _run(tmp_path, [rec])[0]
     assert "code=<redacted>" in out["path"]
