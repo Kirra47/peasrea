@@ -109,7 +109,7 @@ ELF 清点（类型/架构/strip/DT_NEEDED/JNI_OnLoad/RegisterNatives 表）；
 - 流量：`inspect_pcap_capture` / `inspect_web_network_capture`；
 - 证据：`export_evidence_bundle`、`record_unknown`、`verify_reconstruction`。
 
-完整映射（含每条链的命令与注意事项）见 `references/10-rea-integration.md`。
+完整映射（含每条链的命令与注意事项）见 `references/10-toolchain-integration.md`。
 
 ## 本案例知识库
 
@@ -148,7 +148,8 @@ references/06-protocol.md          MTOP 签名、LWS 帧、抓包现实
 references/07-patching-verify.md   三条补丁路线 + 真机验证 + 回滚
 references/08-case-im-client.md     案例复盘：可行性边界与教训
 references/09-ideas-log.md         想法台账：每条试过的路 + ✅/⚠️/❌ 依据
-references/10-rea-integration.md   与 REA 工具链的协同（native/Android/流量/证据）
+references/10-toolchain-integration.md   与本机逆向工具链的协同（native/Android/流量/证据）
+references/11-h5-app-recon.md      H5/微应用侦察：零信任网关后的接口测绘
 scripts/                           可直接复用的工具
 assets/                            Frida 模板（字段 hook / ISurgeon / 机型伪装）
 kb/cases/<case-id>/                各案例的报告与元数据

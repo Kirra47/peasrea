@@ -175,7 +175,8 @@ peasrea/
 │   ├── 07-patching-verify.md      三条补丁路线 + 真机验证 + 回滚
 │   ├── 08-case-im-client.md       案例复盘：能做什么、不能做什么
 │   ├── 09-ideas-log.md            想法台账（每条都标 ✅ / ⚠️ / ❌ 与依据）
-│   └── 10-toolchain-integration.md 与本机逆向工具链的协同
+│   ├── 10-toolchain-integration.md 与本机逆向工具链的协同
+│   └── 11-h5-app-recon.md          H5/微应用侦察（零信任网关后的接口测绘）
 ├── scripts/                 10 个可复用工具（纯标准库）
 ├── tests/                   24 个用例 + 合成 AXML / dex 构造器
 └── kb/                      知识库：cases/<case-id>/reports + kb.sqlite
@@ -203,6 +204,8 @@ peasrea/
 | `extract_surgeon_ids.py` | 从插桩样板里抽取 (方法, id) 映射表 |
 | `kb_build.py` / `kb_add_case.py` / `kb_query.py` | 知识库构建 / 追加案例 / 检索 |
 | `observe_readonly.sh` | 只读真机观测（不安装、不清数据、不点屏） |
+| `h5_capture.py` | 一键配置/还原 H5 抓包（系统 CA + `adb reverse` + 代理） |
+| `sanitize_capture.py` | 抓包脱敏：PII / token / 电话 / 邮箱 / 嵌套 JSON |
 
 <a name="knowledge-base"></a>
 
